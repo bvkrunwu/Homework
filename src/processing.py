@@ -1,4 +1,4 @@
-def filter_by_state(transactions: list, state: str = 'EXECUTED') -> list:
+def filter_by_state(transactions: list[dict[str, str | int]], state: str = "EXECUTED") -> list[dict[str, str | int]]:
     """
     Данная функция получает список транзакций и возвращает новый список,
     включающий только те транзакции, у которых значение ключа 'state'
@@ -24,7 +24,7 @@ def filter_by_state(transactions: list, state: str = 'EXECUTED') -> list:
     # Проходим циклом по каждой транзакции в переданном списке
     for transaction in transactions:
         # Проверяем, соответствует ли состояние текущей транзакции запрашиваемое
-        if transaction.get('state') == state:
+        if transaction.get("state") == state:
             # Добавляем подходящую транзакцию в результирующий список
             filtered_transactions.append(transaction)
 
@@ -32,7 +32,7 @@ def filter_by_state(transactions: list, state: str = 'EXECUTED') -> list:
     return filtered_transactions
 
 
-def sort_by_date(operations: list, ascending: bool = False) -> list:
+def sort_by_date(operations: list[dict[str, str | int]], ascending: bool = False) -> list[dict[str, str | int]]:
     """
     Эта функция получает список операций и упорядочивает их по значению ключа 'date'.
     Направление сортировки определяется параметром ascending: True означает возрастание,
@@ -51,7 +51,7 @@ def sort_by_date(operations: list, ascending: bool = False) -> list:
     """
 
     # Производим сортировку по дате
-    sorted_operations = sorted(operations, key=lambda x: x['date'], reverse=not ascending)
+    sorted_operations = sorted(operations, key=lambda x: x["date"], reverse=not ascending)
 
     # Возвращаем отсортированный список операций
     return sorted_operations
