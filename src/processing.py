@@ -30,3 +30,28 @@ def filter_by_state(transactions: list, state: str = 'EXECUTED') -> list:
 
     # Добавляем итоговый список отфильтрованных транзакций
     return filtered_transactions
+
+
+def sort_by_date(operations: list, ascending: bool = False) -> list:
+    """
+    Эта функция получает список операций и упорядочивает их по значению ключа 'date'.
+    Направление сортировки определяется параметром ascending: True означает возрастание,
+    False (по умолчанию) - убывание.
+
+    Args:
+        operations (list): Список операций, каждая операция представлена в виде словаря,
+                           содержащего среди прочих полей обязательный ключ 'date'.
+                           содержащий строку с датой операции.
+        ascending (bool, optional): Параметр, определяющий порядок сортировки.
+                                    Значение по умолчанию равно False, что соответствует
+                                    сортировке по убыванию (от новых к старым).
+
+    Returns:
+        list: Отсортированный список операций.
+    """
+
+    # Производим сортировку по дате
+    sorted_operations = sorted(operations, key=lambda x: x['date'], reverse=not ascending)
+
+    # Возвращаем отсортированный список операций
+    return sorted_operations
