@@ -43,13 +43,13 @@ def sort_by_date(operations: list[dict[str, str | int]], ascending: bool = True)
 
         ascending (bool, optional): Параметр, определяющий порядок сортировки. Значение по умолчанию равно True,
                                     что соответствует сортировке по убыванию (от новых к старым операциям).
-                                    Если установлено False, сортировка производится по возрастанию (от старых к новым операциям).
+                                    Если установлено False, сортировка производится по возрастанию.
 
     Returns:
         list: Новый отсортированный список операций.
     """
 
     # Производим сортировку по дате
-    sorted_operations = sorted(operations, key=lambda x: x['date'], reverse=not ascending)
+    sorted_operations = sorted(operations, key=lambda x: x["date"], reverse=not ascending)
 
     return sorted_operations
