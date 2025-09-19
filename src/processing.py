@@ -32,26 +32,24 @@ def filter_by_state(transactions: list[dict[str, str | int]], state: str = "EXEC
     return filtered_transactions
 
 
-def sort_by_date(operations: list[dict[str, str | int]], ascending: bool = False) -> list[dict[str, str | int]]:
+def sort_by_date(operations: list[dict[str, str | int]], ascending: bool = True) -> list[dict[str, str | int]]:
     """
-    Эта функция получает список операций и упорядочивает их по значению ключа 'date'.
-    Направление сортировки определяется параметром ascending: True означает возрастание,
-    False (по умолчанию) - убывание.
+    Функция принимает список операций и необязательный параметр ascending, определяющий порядок сортировки.
 
     Args:
-        operations (list): Список операций, каждая операция представлена в виде словаря,
-                           содержащего среди прочих полей обязательный ключ 'date'.
-                           содержащий строку с датой операции.
-        ascending (bool, optional): Параметр, определяющий порядок сортировки.
-                                    Значение по умолчанию равно False, что соответствует
-                                    сортировке по убыванию (от новых к старым).
+        operations (list): Список операций, каждая операция представлена в виде словаря, содержащего среди прочих полей
+                           обязательный ключ 'date'.
+                           Дата хранится в строке формата ISO 8601 ('YYYY-MM-DDTHH:MM:SS.ssssss').
+
+        ascending (bool, optional): Параметр, определяющий порядок сортировки. Значение по умолчанию равно True,
+                                    что соответствует сортировке по убыванию (от новых к старым операциям).
+                                    Если установлено False, сортировка производится по возрастанию (от старых к новым операциям).
 
     Returns:
-        list: Отсортированный список операций.
+        list: Новый отсортированный список операций.
     """
 
     # Производим сортировку по дате
-    sorted_operations = sorted(operations, key=lambda x: x["date"], reverse=not ascending)
+    sorted_operations = sorted(operations, key=lambda x: x['date'], reverse=not ascending)
 
-    # Возвращаем отсортированный список операций
     return sorted_operations
