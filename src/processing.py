@@ -32,24 +32,30 @@ def filter_by_state(transactions: list[dict[str, str | int]], state: str = "EXEC
     return filtered_transactions
 
 
-def sort_by_date(operations: list[dict[str, str | int]], ascending: bool = True) -> list[dict[str, str | int]]:
+def sort_by_date(operations: list[dict[str, str | int]], descending: bool = True) -> list[dict[str, str | int]]:
     """
-    Функция принимает список операций и необязательный параметр ascending, определяющий порядок сортировки.
+    Функция принимает список операций и необязательный параметр descending, определяющий порядок сортировки.
 
     Args:
         operations (list): Список операций, каждая операция представлена в виде словаря, содержащего среди прочих полей
                            обязательный ключ 'date'.
-                           Дата хранится в строке формата ISO 8601 ('YYYY-MM-DDTHH:MM:SS.ssssss').
 
-        ascending (bool, optional): Параметр, определяющий порядок сортировки. Значение по умолчанию равно True,
-                                    что соответствует сортировке по убыванию (от новых к старым операциям).
-                                    Если установлено False, сортировка производится по возрастанию.
+        descending (bool, optional): Параметр, определяющий порядок сортировки.
+                                         - Если установлен в 'True' (используется по умолчанию)
+                                           события сортируются по убыванию дат,
+                                           то есть самыми первыми окажутся наиболее поздние (новейшие) события.
+                                         -Если установлен в 'False', события сортируются по возрастанию дат,
+                                          то есть первыми будут отображаться самые ранние события.
+
+            Примеры:
+                - `descending=True`: `[{"date": "2023-12-31"}, {"date": "2022-01-01"}] → ["2023-12-31", "2022-01-01"]`
+                - `descending=False`: `[{"date": "2023-12-31"}, {"date": "2022-01-01"}] → ["2022-01-01", "2023-12-31"]`
 
     Returns:
         list: Новый отсортированный список операций.
     """
 
-    # Производим сортировку по дате
-    sorted_operations = sorted(operations, key=lambda x: x["date"], reverse=not ascending)
+    # Производим сортировку операций по дате с указанием направления (по убыванию или возрастанию)
+    sorted_operations = sorted(operations, key=lambda x: x["date"], reverse=descending)
 
     return sorted_operations
