@@ -25,6 +25,7 @@ def get_mask_card_number(card_number: str) -> str:
     # Создаем маску номера карты
     masked_card_number = f"{clean_digits[:4]} {clean_digits[4:6]}** **** {clean_digits[-4:]}"
 
+    # Возвращаем замаскированную версию номера карты (видимы первые 6 и последние 4 цифры)
     return masked_card_number
 
 
@@ -52,4 +53,5 @@ def get_mask_account(account_number: str) -> str:
     # Создаем маску номера счёта
     masked_account_number = f"**{clean_digits[-4:]}"
 
+    # Возвращаем замаскированную версию номера счёта (видимы только последние 4 цифры)
     return masked_account_number
