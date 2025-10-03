@@ -1,48 +1,69 @@
+from datetime import datetime
+
 from .masks import get_mask_account
 from .masks import get_mask_card_number
 
 
 def mask_account_card(info_string: str) -> str:
     """
-    Функция принимает строку с названием карты/счета и его номером и возвращает замаскированную версию номера.
+    Функция маскирует номер счета или банковской карты в строке формата "Label Number".
 
     Args:
-        info_string (str): Строка, содержащая название карты/счета и его номер (разделяются пробелом).
+        info_string (str): Входящая строка, содержащая метку и номер (разделённые пробелом)
 
     Returns:
-        str: Строка с замаскированной версией номера карты/счета.
+        str: Строка с замаскированным номером счета или карты
+
+    Raises:
+        ValueError: Возбуждается, если количество частей строки отличается от двух
     """
-    # Разделяем входную строку на две части: название и номер
-    account_title, account_number = info_string.rsplit(" ", 1)
 
-    # Проверяем корректность входных данных
-    if not account_title or not account_number:
-        return "Ошибка: некорректный формат входной строки!"
+    # Разделяем входящую строку на части по пробелу
+    parts = info_string.split()
 
-    # Определяем тип и применяем соответствующую маску
-    if account_title.lower() == "счет":
-        masked_number = get_mask_account(account_number)
+    # Проверяем, что строка состоит именно из двух частей (метка + номер)
+    if len(parts) != 2:
+        raise ValueError("Некорректный ввод данных")
+
+    # Извлекаем метку и номер из частей строки
+    label, number = parts
+
+    # Определяем тип номера по метке и применяем соответствующую маску
+    if label.lower().startswith("счет"):
+        # Если метка начинается со слова "счет", маскируем номер как счёт
+        masked_number = get_mask_account(number)
     else:
-        masked_number = get_mask_card_number(account_number)
+        # Иначе маскируем номер как банковскую карту
+        masked_number = get_mask_card_number(number)
 
-    # Возвращаем результат в виде строки с названием и замаскированным номером
-    return f"{account_title} {masked_number}"
+    # Формируем итоговую строку с замаскированным номером
+    return f"{label} {masked_number}"
 
 
-def get_date(date_string: str) -> str:
+def get_date(iso_date_str: str) -> str:
     """
-    Функция преобразует строку даты из формата YYYY-MM-DD в формат ДД.ММ.ГГГГ.
+    Функция конвертирует ISO-строку даты в формат ДД.ММ.ГГГГ.
 
     Args:
-        date_string (str): Строка даты в формате YYYY-MM-DD.
+        iso_date_str (str): Дата в формате ISO (YYYY-MM-DDTHH:MM:SS.mmmmmm)
 
     Returns:
-        str: Отформатированная строка даты в формате ДД.ММ.ГГГГ.
-    """
-    # Разделяем входную строку на компоненты: год, месяц и день
-    year = date_string[0:4]
-    month = date_string[5:7]
-    day = date_string[8:10]
+        str: Отформатированная дата в виде ДД.ММ.ГГГГ
 
-    # Формируем новую строку в нужном формате
-    return f"{day}.{month}.{year}"
+    Raises:
+        ValueError: Возбуждается при невозможности распарсить входную строку
+    """
+
+    # Удаляем микросекунды из ISO-строки для корректного преобразования
+    date_part = iso_date_str.rsplit(".", maxsplit=1)[0]
+
+    # Конвертируем строку в объект datetime
+    try:
+        dt = datetime.fromisoformat(date_part)
+
+        # Форматируем дату в нужный вид ДД.ММ.ГГГГ
+        formatted_date = dt.strftime("%d.%m.%Y")
+        return formatted_date
+    except ValueError as e:
+        # Генерируем ошибку с детальной информацией при неудачном парсинге
+        raise ValueError(f"Ошибка парсинга даты: {e}")
