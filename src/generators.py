@@ -28,3 +28,22 @@ def filter_by_currency(transactions, currency_code):
     )
 
     return matching_currency
+
+
+def transaction_descriptions(transactions):
+    """
+    Принимает список словарей с транзакциями
+     и возвращающая описание каждой операции по очереди.
+    Функция-генератор последовательно проходит по списку транзакций и возвращает строки с описаниями операций.
+    Ожидается, что каждая транзакция представлена в виде словаря, содержащего ключ 'description',
+    который хранит текстовую информацию о самой транзакции.
+
+    Args:
+    transactions (list of dicts): Список словарей, содержащих данные о транзакциях.
+
+    Yields:
+    Генератор, выдающий строку с описанием транзакции при каждом обращении.
+    """
+
+    for transaction in transactions:
+        yield transaction["description"]
