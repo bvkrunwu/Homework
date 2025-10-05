@@ -47,3 +47,35 @@ def transaction_descriptions(transactions):
 
     for transaction in transactions:
         yield transaction["description"]
+
+
+def card_number_generator(start, stop):
+    """
+    Генерирует номера банковских карт в формате XXXX XXXX XXXX XXXX.
+    Функция-генератор создает последовательность номеров банковских карт в формате XXXX XXXX XXXX XXXX,
+    начиная с указанного стартового числа и заканчивая финишным числом включительно.
+    Каждый номер дополняется ведущими нулями до общей длины 16 символов.
+
+    Args:
+        start (int): Начальное значение диапазона (включительно)
+        stop (int): Конечное значение диапазона (включительно)
+
+    Raises:
+        TypeError: Если хотя бы один из аргументов не является целым числом.
+        ValueError: Если начальное значение меньше единицы, конечное значение превышает максимальное,
+                    или начальное значение больше конечного.
+
+    Yields:
+        str: Номер банковской карты в формате XXXX XXXX XXXX XXXX
+    """
+
+    if not isinstance(start, int) or not isinstance(stop, int):
+        raise TypeError("start и stop должны быть целыми числами")
+    if start <= 0 or stop > 9999999999999999:
+        raise ValueError("Диапазон должен быть от 1 до 9999999999999999")
+    if start > stop:
+        raise ValueError("Начальное значение должно быть меньше или равно конечному значению")
+
+    for number in range(start, stop + 1):
+        formatted_numbers = f"{number:016d}"
+        yield f"{formatted_numbers[:4]} {formatted_numbers[4:8]} {formatted_numbers[8:12]} {formatted_numbers[12:]}"
