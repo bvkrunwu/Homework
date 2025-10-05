@@ -51,7 +51,7 @@ def get_mask_account(account_number: str) -> str:
     if not isinstance(account_number, str) or len(account_number) < 4:
         raise ValueError("Ошибка: недостаточная длина номера счета.")
 
-    # Проверка на цифирность
+    # Проверка, что номер счёта состоит только из цифр.
     if not account_number.isdigit():
         raise ValueError("Ошибка: неверный формат номера счета.")
 
