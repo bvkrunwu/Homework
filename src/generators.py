@@ -1,4 +1,7 @@
-def filter_by_currency(transactions, currency_code):
+from typing import Any, Dict, Generator, Iterable, List
+
+
+def filter_by_currency(transactions: List[Dict[str, Any]], currency_code: str) -> Iterable[Dict[str, Any]]:
     """
     Фильтрует транзакции по заданному коду валюты.
     Функция получает список транзакций, затем выбирает только те транзакции,
@@ -30,7 +33,7 @@ def filter_by_currency(transactions, currency_code):
     return matching_currency
 
 
-def transaction_descriptions(transactions):
+def transaction_descriptions(transactions: List[Dict[str, Any]]) -> Generator[str, None, None]:
     """
     Принимает список словарей с транзакциями
      и возвращающая описание каждой операции по очереди.
@@ -49,7 +52,7 @@ def transaction_descriptions(transactions):
         yield transaction["description"]
 
 
-def card_number_generator(start, stop):
+def card_number_generator(start: int, stop: int) -> Generator[str, None, None]:
     """
     Генерирует номера банковских карт в формате XXXX XXXX XXXX XXXX.
     Функция-генератор создает последовательность номеров банковских карт в формате XXXX XXXX XXXX XXXX,
