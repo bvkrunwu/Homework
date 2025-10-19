@@ -8,6 +8,21 @@ load_dotenv()
 
 
 def convert_transaction_amount_to_rubles(transaction: dict[str, Any]) -> float | None:
+    """
+    Конвертирует сумму транзакции в рубли, если валюта отличается от рублей.
+
+    Сначала проверяется валюта транзакции. Если она равна USD или EUR,
+    производится запрос к внешнему API для конвертации суммы в рубли.
+    Для остальных валют возвращается оригинальная сумма.
+
+    Args:
+        transaction (dict[str, Any]): Словарь, содержащий информацию о транзакции.
+            Ожидается наличие ключа 'operationAmount', содержащего вложенный словарь
+            с ключами 'amount' и 'currency'.
+
+    Returns:
+        float | None: Сумма транзакции в рублях или None в случае ошибки.
+    """
 
     # Получаем валюту транзакции
     currency_code = transaction["operationAmount"]["currency"]["code"]
