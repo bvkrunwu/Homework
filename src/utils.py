@@ -1,8 +1,6 @@
-from pathlib import Path
-
 import json
-
-from typing import Dict, List, Optional, Any
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 
 def load_transactions(file_path: Optional[str | Path]) -> Optional[List[Dict[str, Any]]]:
