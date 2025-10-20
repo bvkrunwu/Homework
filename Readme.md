@@ -4,20 +4,31 @@
 
 ## 📦 Текущая структура проекта
 
-Homework/   
+Homework/  
+├── data/  
+│   └── operations.json   
+├── htmlcov/  
 ├── src/  
 │   ├── __ init __.py   
 │   ├── decorators.py  
+│   ├── external_api.py  
 │   ├── generators.py  
 │   ├── mask.py  
 │   ├── processing.py  
+│   ├── utils.py   
 │   └── widget.py  
 ├── tests/  
 │   ├── test_decorators.py  
+│   ├── test_external_api.py  
 │   ├── test_generators.py  
 │   ├── test_mask.py  
 │   ├── test_processing.py  
-│   └── test_widget.py  
+│   ├── test_utils.py  
+│   └── test_widget.py 
+│  
+├── .coverage  
+├── .env  
+├── .env.example  
 ├── .flake8  
 ├── .gitignore  
 ├── main.py  
@@ -26,7 +37,7 @@ Homework/
 └── README.md
 ## ⚙️ Реализованные модули и функции
 
-### Модуль `generators`
+### Модуль `decorators.py`
 
 #### Декоратор `log`
 
@@ -68,7 +79,44 @@ my_function error: тип ошибки. Inputs: (1, 2), {}
  заменяется на текст ошибки.
 ```
 
+### Модуль `external_api`  
 
+#### Функция `convert_transaction_amount_to_rubles`  
+
+**Описание:**  
+Конвертирует сумму транзакции в рубли, если валюта отличается от рублей.  
+Сначала проверяется валюта транзакции. Если она равна USD или EUR, производится запрос к внешнему API для конвертации суммы в рубли.  
+Для остальных валют возвращается оригинальная сумма.
+
+**Параметры:**  
+transaction (dict[str, Any]): Словарь, содержащий информацию о транзакции.  
+Ожидается наличие ключа 'operationAmount', содержащего вложенный словарь с ключами 'amount' и 'currency'.  
+
+**Возвращаемое значение:**  
+float | None: Сумма транзакции в рублях или None в случае ошибки.
+
+**Пример использования:**  
+
+```
+# Образец транзакции
+sample_transaction = {
+    "operationAmount": {
+        "amount": "100",
+        "currency": {
+            "code": "USD"
+        }
+    }
+}
+
+# Преобразование суммы транзакции в рубли
+rubles_amount = convert_transaction_amount_to_rubles(sample_transaction)
+
+# Проверка результата
+if rubles_amount is not None:
+    print(f"Сумма транзакции в рублях: {rubles_amount:.2f}")
+else:
+    print("Ошибка конвертации валюты.")
+```
 
 ### Модуль `generators`  
 
@@ -270,6 +318,33 @@ ops_list = [
 sorted_ops = sort_by_date(ops_list)
 print(sorted_ops)  # Выведет: [{'date': '2023-12-31'}, {'date': '2023-01-01'}]
 ```
+
+### Модуль `utils`
+
+#### Функция `load_transactions`
+
+**Описание:**   
+Функция загружает финансовые транзакции из указанного JSON-файла.
+
+**Параметры:**  
+file_path (Optional[str | Path]): Путь к файлу JSON с финансовыми транзакциями.
+По умолчанию используется файл 'operations.json' в папке 'data'.
+
+**Возвращаемое значение:**  
+Optional[List[Dict[str, Any]]]: Список словарей с данными транзакций, либо пустой список в случае ошибок или неправильного формата данных.
+
+Пример использования:
+
+```
+transactions = load_transactions(None)
+print(transactions)
+
+>>> [{'id': 441945886, 'state': 'EXECUTED', 'date': '2019-08-26T10:50:58.294041', 'operationAmount': {'amount': '31957.58', 'currency': {'name': 'руб.', 'code': 'RUB'}}, 'description': 'Перевод организации', 'from': 'Maestro 1596837868705199', 'to': 'Счет 64686473678894779589'},
+     {'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364', 'operationAmount': {'amount': '8221.37', 'currency': {'name': 'USD', 'code': 'USD'}}, 'description': 'Перевод организации', 'from': 'MasterCard 7158300734726758', 'to': 'Счет 35383033474447895560'}
+]
+
+```
+
 
 ### Модуль `widget`  
 
